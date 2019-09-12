@@ -6,12 +6,14 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
+import Game.GameStates.State;
 /**
  * Created by AlexVR on 7/2/2018.
  */
 public class Player {
 
-    public int lenght;
+
+	public int lenght;
     public boolean justAte;
     private Handler handler;
 
@@ -19,6 +21,11 @@ public class Player {
     public int yCoord;
 
     public int moveCounter;
+    
+    public int speed = 7;
+    public double currScore;
+    public double score;
+
 
     public String direction;//is your first name one?
 
@@ -30,25 +37,34 @@ public class Player {
         direction= "Right";
         justAte = false;
         lenght= 1;
+        currScore = 1;
 
     }
 
     public void tick(){
         moveCounter++;
-        if(moveCounter>=5) {
+        if(moveCounter>=speed) {
             checkCollisionAndMove();
             moveCounter=0;
-        }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
+            
+        } if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
-            direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+        }
+         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
+        	direction="Down";
+            
+         } 
+         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+            
+         }
+         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
             direction="Right";
-        } if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
+
+         }  
+         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
         	lenght++;
+        	
         	Tail tail= null;
         	switch (direction){
             case "Left":
@@ -151,11 +167,22 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
+       
+        if((handler.getWorld().playerLocation[tail.x][tail.y] == handler.getWorld().playerLocation[xCoord][yCoord]) && handler.getKeyManager().keyJustPressed(KeyEvent.VK_N) == false) {
+        	System.out.println("Game Over");    
+   }
     }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)) {
+    	   State.setState(handler.getGame().pauseState); 
         }
-
-    
-
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)) {
+   		 this.speed -= 1;
+   }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS)) {
+   		 this.speed += 1; 
+        }
+        }
+        
     public void checkCollisionAndMove(){
         handler.getWorld().playerLocation[xCoord][yCoord]=false;
         int x = xCoord;
@@ -163,38 +190,50 @@ public class Player {
         switch (direction){
             case "Left":
                 if(xCoord==0){
-                    kill();
+                	handler.getWorld().player.xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+    //                kill();
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                	handler.getWorld().player.xCoord = 0;
+    //                kill();
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){
-                    kill();
+                	handler.getWorld().player.yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+     //               kill();
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                	handler.getWorld().player.yCoord = 0;
+  //                  kill();
                 }else{
                     yCoord++;
                 }
                 break;
-        }
+            	}
+       
         handler.getWorld().playerLocation[xCoord][yCoord]=true;
 
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
             Eat();
+        }
+        
+        for(int i = 0; i < handler.getWorld().body.size(); i++) {
+       		if (handler.getWorld().player.xCoord == handler.getWorld().body.get(i).x && handler.getWorld().player.yCoord == handler.getWorld().body.get(i).y){
+       				kill();
+       				
+        	}
         }
 
         if(!handler.getWorld().body.isEmpty()) {
@@ -204,7 +243,7 @@ public class Player {
         }
 
     }
-
+   
     public void render(Graphics g,Boolean[][] playeLocation){
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
@@ -221,11 +260,12 @@ public class Player {
             }
         }
 
-
     }
-
-    public void Eat(){
-    	lenght++;
+    
+	public void Eat() {
+		lenght++;
+    	score = Math.sqrt((2*currScore)+1);
+    	speed +=- 7;
         Tail tail= null;
         handler.getWorld().appleLocation[xCoord][yCoord]=false;
         handler.getWorld().appleOnBoard=false;
@@ -331,17 +371,19 @@ public class Player {
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
     }
+    
 
-    public void kill(){
+	public void kill(){
         lenght = 0;
-        for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
-            for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
+//        for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
+//            for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
-                handler.getWorld().playerLocation[i][j]=false;
-
-            }
-        }
-    }
+            //    handler.getWorld().playerLocation[xCoord][yCoord]=false;
+             //   System.out.println("Nerd Moment");
+		        State.setState(handler.getGame().gameOverState);
+            }   
+//        }
+//		        	}
 
     public boolean isJustAte() {
         return justAte;

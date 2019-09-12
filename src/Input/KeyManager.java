@@ -43,7 +43,7 @@ public class KeyManager implements KeyListener {
 		right = keys[KeyEvent.VK_D];
 		
 		nkey = keys[KeyEvent.VK_N];
-		pluskey = keys[KeyEvent.VK_ADD];
+		pluskey = keys[KeyEvent.VK_EQUALS];
 		minuskey=keys[KeyEvent.VK_MINUS];
 		
 		pbutt = keys[KeyEvent.VK_ESCAPE];

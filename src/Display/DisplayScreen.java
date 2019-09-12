@@ -13,6 +13,7 @@ import javax.swing.*;
 public class DisplayScreen {
 
     private JFrame frame;
+    
     private Canvas canvas;
     private String title;
     private int width, height;
@@ -47,14 +48,10 @@ public class DisplayScreen {
         canvas.setMinimumSize(new Dimension(width, height));
         canvas.setFocusable(false);
 		canvas.setBackground(new Color(128,0,128));
+		
         frame.add(canvas);
         frame.pack();
     }
-
-    private Color Color(int i, int j, int k) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public Canvas getCanvas(){
         return canvas;
@@ -63,5 +60,4 @@ public class DisplayScreen {
     public JFrame getFrame(){
         return frame;
     }
-
 }

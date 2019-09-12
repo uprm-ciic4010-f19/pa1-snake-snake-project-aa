@@ -2,6 +2,8 @@ package Resources;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+// import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -9,15 +11,15 @@ import java.io.IOException;
  * Created by AlexVR on 7/1/2018.
  */
 public class Images {
-
-
-    public static BufferedImage[] butstart;
+    
+	public static BufferedImage[] butstart;
     public static BufferedImage title;
     public static BufferedImage Pause;
     public static BufferedImage[] Resume;
     public static BufferedImage[] BTitle;
     public static BufferedImage[] Options;
     public static ImageIcon icon;
+    public static BufferedImage GameOver;
 
     public Images() {
 
@@ -30,6 +32,7 @@ public class Images {
 
             title = ImageIO.read(getClass().getResourceAsStream("/Sheets/Title.png"));
             Pause = ImageIO.read(getClass().getResourceAsStream("/Buttons/Pause.png"));
+            GameOver = ImageIO.read(getClass().getResourceAsStream("/Sheets/GameOver.png"));
             Resume[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Resume.png"));
             Resume[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/ResumeP.png"));
             BTitle[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/BTitle.png"));

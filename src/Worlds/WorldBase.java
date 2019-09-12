@@ -52,12 +52,18 @@ public abstract class WorldBase {
     }
 
     public void render(Graphics g){
+    	Graphics2D score = (Graphics2D) g;
+    	String scoreNum = Double.toString(player.score);
+
 
         for (int i = 0; i <= 800; i = i + GridPixelsize) {
 
             g.setColor(new Color(128,0,128));
             g.drawLine(0, i, handler.getWidth() , i);
             g.drawLine(i,0,i,handler.getHeight());
+            score.setColor(Color.BLACK);
+            score.setFont(new Font("Chalkboard", Font.PLAIN, 30));
+            score.drawString("Score: " + scoreNum, 600, 50);
 
         }
 
